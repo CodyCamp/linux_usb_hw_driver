@@ -131,6 +131,13 @@ int main(int argc, char** argv){
                     // handling of close button
                     close = 1;
                     break;
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym) {
+                        case SDLK_ESCAPE: 
+                            close = 1;
+                            break;
+                    }
+                    break;
             }
         }
         charsRead = read(devHandle, &result, 15);
