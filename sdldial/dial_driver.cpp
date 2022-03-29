@@ -62,6 +62,17 @@ void drawGauge(int thickness, int radius, double value, SDL_Renderer* rend, TTF_
 }
 
 int main(int argc, char** argv){
+    int devHandle;
+    if(argc > 2){
+        devHandle = open(argv[2], O_RDONLY | O_NONBLOCK);
+    }
+    else{
+        devHandle = open("/dev/ttyACM0", O_RDONLY | O_NONBLOCK);
+    }
+    if(devHandle == -1){
+        std::cout << "Cannot open file" << std::endl;
+        exit(-1);
+    }
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
        printf("error initializing SDL: %s\n", SDL_GetError());
     }
@@ -87,17 +98,7 @@ int main(int argc, char** argv){
     SDL_RenderClear(rend);
     drawGauge(10, 150, gaugeVal, rend, lora);
     SDL_RenderPresent(rend);
-    int devHandle;
-    if(argc > 2){
-        devHandle = open(argv[2], O_RDONLY | O_NONBLOCK);
-    }
-    else{
-        devHandle = open("/dev/ttyACM0", O_RDONLY | O_NONBLOCK);
-    }
-    if(devHandle == -1){
-        std::cout << "Cannot open file" << std::endl;
-        exit(-1);
-    }
+    
     struct termios config;
     
     // don't touch the black magic parameters
